@@ -286,19 +286,18 @@ const ActivityModal = ({ onClose, onSave, day, start }: ActivityModalProps) => {
         } else if(remind) {
             scheduleNotification();
         }
-        // FIX: Explicitly convert start and duration to numbers before performing addition to prevent potential type errors.
         onSave({ title, end: Number(start) + Number(duration), priority, color, note });
     };
 
     const scheduleNotification = () => {
          const now = new Date();
          const activityDate = new Date();
-         // FIX: Explicitly convert operands to Number to ensure correct arithmetic operation.
-         const dayDiff = Number(day) - now.getDay();
+         // FIX: Removed redundant Number() cast as `day` prop is already a number.
+         const dayDiff = day - now.getDay();
          activityDate.setDate(now.getDate() + dayDiff);
          activityDate.setHours(Math.floor(start/60), start % 60, 0, 0);
 
-         // FIX: Explicitly cast operands to Number to ensure the arithmetic operation is valid.
+         // FIX: Explicitly cast return values of getTime() and now() to Number to resolve potential type ambiguity.
          const timeout = Number(activityDate.getTime()) - Number(Date.now()) - (5 * 60 * 1000); // 5 mins before
          if(timeout > 0) {
              setTimeout(() => {
