@@ -1,0 +1,11 @@
+{
+  "name": "muvikit-deploy",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "mkdir -p dist && cp index.html dist/index.html && esbuild index.tsx --bundle --outfile=dist/bundle.js --platform=browser --define:process.env.NODE_ENV='\"production\"' --external:react-dom/* --external:react/* --external:react --external:react-image-crop --external:qrcode.react --external:react-circular-progressbar --external:@google/genai --external:jspdf --external:html2canvas --external:pdf-lib --external:pdfjs-dist/build/pdf.mjs --external:tesseract.js --external:react-signature-canvas --external:jspdf-autotable"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.0"
+  }
+}

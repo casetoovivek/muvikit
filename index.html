@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Muvikit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/react-image-crop/dist/ReactCrop.css" />
+  <link rel="stylesheet" href="https://unpkg.com/react-circular-progressbar/dist/styles.css" />
+<script>
+  // Setup Tailwind to use the 'dark' class on the <html> tag
+  tailwind.config = {
+    darkMode: 'class',
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-image-crop": "https://aistudiocdn.com/react-image-crop@^11.0.10",
+    "qrcode.react": "https://aistudiocdn.com/qrcode.react@^3.1.0",
+    "react-circular-progressbar": "https://aistudiocdn.com/react-circular-progressbar@^2.1.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.25.0",
+    "jspdf": "https://aistudiocdn.com/jspdf@^2.5.1",
+    "html2canvas": "https://aistudiocdn.com/html2canvas@^1.4.1",
+    "pdf-lib": "https://aistudiocdn.com/pdf-lib@^1.17.1",
+    "pdfjs-dist/build/pdf.mjs": "https://aistudiocdn.com/pdfjs-dist@^4.4.168/build/pdf.mjs",
+    "tesseract.js": "https://aistudiocdn.com/tesseract.js@^5.1.0",
+    "react-signature-canvas": "https://aistudiocdn.com/react-signature-canvas@^1.0.6",
+    "jspdf-autotable": "https://aistudiocdn.com/jspdf-autotable@^5.0.2"
+  }
+}
+</script>
+<!-- New libraries for file conversion -->
+<script src="https://unpkg.com/mammoth@1.6.0/mammoth.browser.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pptx-js@3.2.0/dist/pptx.min.js"></script>
+<script src="https://unpkg.com/html-to-docx-file-saver@1.8.0/dist/html-to-docx.js"></script>
+<script type="module">
+  // Configure the worker for PDF.js to ensure it runs correctly.
+  import * as pdfjsLib from 'pdfjs-dist/build/pdf.mjs';
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://aistudiocdn.com/pdfjs-dist@^4.4.168/build/pdf.worker.mjs';
+  window.pdfjsLib = pdfjsLib;
+</script>
+<style>
+  :root {
+    --theme-primary: #0d3e80; /* Deep Professional Blue */
+    --theme-primary-light: #e0f2fe; /* Sky Blue Light */
+    --theme-accent: #00b9f5; /* Bright accent blue */
+    --theme-text-gold: #fcd34d; /* Amber 300 for dark mode text */
+  }
+
+  /* Custom scrollbar for better dark mode aesthetics */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9; /* slate-100 */
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #94a3b8; /* slate-400 */
+    border-radius: 4px;
+    border: 2px solid #f1f5f9; /* slate-100 */
+  }
+  .dark ::-webkit-scrollbar-track {
+    background: #1e293b; /* slate-800 */
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: #475569; /* slate-600 */
+    border-color: #1e293b; /* slate-800 */
+  }
+</style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900">
+  <div id="root"></div>
+  <script src="/bundle.js"></script>
+  <script>
+    // Self-contained Ad Blocker Detector
+    (function() {
+      const bait = document.createElement('div');
+      bait.className = 'pub_300x250 pub_300x250m pub_728x90 text-ad text-ads text-ad-links ad-text ad-banner';
+      bait.style.position = 'absolute';
+      bait.style.left = '-9999px';
+      bait.style.top = '-9999px';
+      bait.style.height = '1px';
+      bait.style.width = '1px';
+      
+      function triggerAdblockerModal() {
+        const event = new CustomEvent('adblock-detected');
+        window.dispatchEvent(event);
+      }
+  
+      document.body.appendChild(bait);
+      
+      // Use a short timeout to let adblockers act on the element
+      setTimeout(() => {
+        if (bait.offsetHeight === 0 || window.getComputedStyle(bait).getPropertyValue('display') === 'none') {
+          triggerAdblockerModal();
+        }
+        if (document.body.contains(bait)) {
+          document.body.removeChild(bait);
+        }
+      }, 300);
+    })();
+  </script>
+</body>
+</html>
