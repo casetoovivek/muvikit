@@ -270,7 +270,7 @@ interface ActivityModalProps {
 }
 const ActivityModal = ({ onClose, onSave, day, start }: ActivityModalProps) => {
     const [title, setTitle] = useState('');
-    const [duration, setDuration] = useState(60);
+    const [duration, setDuration] = useState('60');
     const [priority, setPriority] = useState<Priority>('Medium');
     const [color, setColor] = useState(SUBJECT_COLORS[0]);
     const [note, setNote] = useState('');
@@ -286,17 +286,20 @@ const ActivityModal = ({ onClose, onSave, day, start }: ActivityModalProps) => {
         } else if(remind) {
             scheduleNotification();
         }
-        onSave({ title, end: start + duration, priority, color, note });
+        // FIX: Explicitly convert start and duration to numbers before performing addition to prevent potential type errors.
+        onSave({ title, end: Number(start) + Number(duration), priority, color, note });
     };
 
     const scheduleNotification = () => {
          const now = new Date();
          const activityDate = new Date();
-         const dayDiff = day - now.getDay();
+         // FIX: Explicitly convert operands to Number to ensure correct arithmetic operation.
+         const dayDiff = Number(day) - now.getDay();
          activityDate.setDate(now.getDate() + dayDiff);
          activityDate.setHours(Math.floor(start/60), start % 60, 0, 0);
 
-         const timeout = activityDate.getTime() - Date.now() - (5 * 60 * 1000); // 5 mins before
+         // FIX: Explicitly cast operands to Number to ensure the arithmetic operation is valid.
+         const timeout = Number(activityDate.getTime()) - Number(Date.now()) - (5 * 60 * 1000); // 5 mins before
          if(timeout > 0) {
              setTimeout(() => {
                  new Notification('Routine Reminder', { body: `Your activity "${title}" is starting in 5 minutes.` });
@@ -309,11 +312,11 @@ const ActivityModal = ({ onClose, onSave, day, start }: ActivityModalProps) => {
             <div className="bg-white dark:bg-slate-800 p-6 rounded-lg w-full max-w-md space-y-4">
                 <h2 className="text-xl font-bold">Add/Edit Activity</h2>
                 <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Activity Title" className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600" />
-                <select value={duration} onChange={e => setDuration(Number(e.target.value))} className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
-                    <option value={30}>30 mins</option>
-                    <option value={60}>1 hour</option>
-                    <option value={90}>1.5 hours</option>
-                    <option value={120}>2 hours</option>
+                <select value={duration} onChange={e => setDuration(e.target.value)} className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
+                    <option value="30">30 mins</option>
+                    <option value="60">1 hour</option>
+                    <option value="90">1.5 hours</option>
+                    <option value="120">2 hours</option>
                 </select>
                 <select value={priority} onChange={e => setPriority(e.target.value as Priority)} className="w-full p-2 border rounded dark:bg-slate-700 dark:border-slate-600">
                     <option>High</option><option>Medium</option><option>Low</option>
