@@ -72,20 +72,23 @@ const DomainChecker: React.FC = () => {
                  },
             });
             
-            // FIX: Clean the response text to ensure it's valid JSON before parsing, removing potential markdown code blocks.
-            let jsonString = response.text;
+            let jsonString = response.text.trim();
             if (jsonString.startsWith('```json')) {
                 jsonString = jsonString.substring(7, jsonString.length - 3).trim();
             } else if (jsonString.startsWith('```')) {
                 jsonString = jsonString.substring(3, jsonString.length - 3).trim();
             }
 
-            const parsedResult = JSON.parse(jsonString);
-            setResult(parsedResult);
+            try {
+                const parsedResult = JSON.parse(jsonString);
+                setResult(parsedResult);
+            } catch (parseError) {
+                 throw new Error("AI returned an invalid response format. Please try again.");
+            }
 
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            setError(`Failed to check "${domain}". The domain might be invalid, or the AI service is currently unavailable. Please try again.`);
+            setError(err.message || `Failed to check "${domain}". The domain might be invalid, or the AI service is currently unavailable.`);
         } finally {
             setIsLoading(false);
         }
@@ -100,7 +103,7 @@ const DomainChecker: React.FC = () => {
 
             <div className="bg-white p-4 rounded-lg border border-slate-200 dark:bg-slate-800 dark:border-slate-700">
                 <div className="flex flex-col sm:flex-row gap-4">
-                    <input type="text" value={domain} onChange={(e) => setDomain(e.target.value.toLowerCase())} placeholder="e.g., myawesomewebsite.com" className="flex-grow w-full px-4 py-2 bg-white text-slate-900 border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-[var(--theme-primary)] dark:bg-slate-700 dark:border-slate-600 dark:text-white" />
+                    <input type="text" value={domain} onChange={(e) => setDomain(e.target.value.toLowerCase())} placeholder="e.g., myawesomewebsite.com" className="flex-grow w-full px-4 py-2 bg-white text-slate-900 border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-[var(--theme-primary)] dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100" />
                     <button onClick={handleCheck} disabled={isLoading} className="px-5 py-2 bg-[var(--theme-primary)] text-white font-semibold rounded-lg shadow-md hover:opacity-90 disabled:bg-gray-400 flex items-center justify-center dark:disabled:bg-slate-600">
                         {isLoading ? <SpinnerIcon className="w-5 h-5 animate-spin" /> : <SearchIcon className="w-5 h-5" />}
                         <span className="ml-2">{isLoading ? 'Checking...' : 'Check'}</span>
@@ -164,6 +167,33 @@ const DomainChecker: React.FC = () => {
                     </div>
                 </div>
             )}
+            <div className="bg-white p-6 rounded-lg border border-slate-200 dark:bg-slate-800 dark:border-slate-700 space-y-6 mt-6">
+                <section>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">What is a Domain Checker?</h2>
+                    <p className="mt-2 text-slate-600 dark:text-slate-300">A Domain Checker is a tool that verifies if a specific website domain name is available to be registered. If the domain is already taken, it can perform a WHOIS lookup to retrieve public registration details like the registrar, registration date, and expiration date. Our AI-powered tool goes a step further by providing purchase suggestions from popular registrars if the domain is available and generating alternative domain ideas if it's not.</p>
+                </section>
+                <section>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">How to Use This Tool</h2>
+                    <ol className="list-decimal list-inside mt-2 space-y-2 text-slate-600 dark:text-slate-300">
+                        <li><strong>Enter a Domain Name:</strong> Type the full domain name you want to check, including the extension (e.g., mywebsite.com, mybusiness.org).</li>
+                        <li><strong>Click "Check":</strong> The AI will perform a real-time search to determine the domain's status.</li>
+                        <li><strong>Review Results:</strong> You will see an immediate confirmation of whether the domain is available or taken. The tool will also provide relevant details like WHOIS data, purchase deals, and alternative suggestions.</li>
+                    </ol>
+                </section>
+                <section>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Frequently Asked Questions (FAQs)</h2>
+                    <div className="mt-2 space-y-3 text-slate-600 dark:text-slate-300">
+                        <div>
+                            <h3 className="font-semibold">What is WHOIS data?</h3>
+                            <p>WHOIS is a public record of who owns a domain name and how to get in contact with them. However, many owners use privacy services to hide their personal information, in which case the owner may be listed as "Redacted for Privacy."</p>
+                        </div>
+                        <div>
+                            <h3 className="font-semibold">Is the availability check accurate?</h3>
+                            <p>Yes, the tool uses real-time search capabilities to provide the most current availability status. However, domain availability can change in an instant, so it's always best to register a desired name as soon as you find it's available.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
     );
 };

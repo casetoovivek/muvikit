@@ -7,12 +7,14 @@ const UnlockPdf: React.FC = () => {
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
         if (selectedFile && selectedFile.type === 'application/pdf') {
             setFile(selectedFile);
             setError('');
+            setSuccess('');
         } else {
             setFile(null);
             setError('Please select a valid PDF file.');
@@ -21,20 +23,23 @@ const UnlockPdf: React.FC = () => {
 
     const handleUnlock = async () => {
         if (!file || !password) {
-            setError('Please select a file and provide the password.');
+            setError('Please select a file and enter its password.');
             return;
         }
         setIsLoading(true);
         setError('');
+        setSuccess('');
 
         try {
             const pdfBytes = await file.arrayBuffer();
-            const pdfDoc = await PDFDocument.load(pdfBytes, {
+            
+            // Attempt to load the document with the provided password.
+            // This will throw an error if the password is incorrect.
+            const pdfDoc = await PDFDocument.load(pdfBytes, { 
                 password: password,
             });
 
-            // The document is now loaded and decrypted in memory.
-            // We just need to save it again without encryption.
+            // If loading succeeds, save the document without a password.
             const unlockedPdfBytes = await pdfDoc.save();
 
             const blob = new Blob([unlockedPdfBytes], { type: 'application/pdf' });
@@ -42,21 +47,23 @@ const UnlockPdf: React.FC = () => {
             const a = document.createElement('a');
             a.href = url;
             a.download = `unlocked_${file.name}`;
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            // Reset state
-            const input = document.querySelector('input[type="file"]') as HTMLInputElement;
-            if (input) input.value = '';
+            setSuccess(`Successfully unlocked "${file.name}"! The download should start automatically.`);
+            const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+            if(fileInput) fileInput.value = '';
             setFile(null);
             setPassword('');
 
         } catch (err: any) {
             console.error(err);
             if (err.message.includes('password')) {
-                setError('Invalid password. Please check the password and try again.');
+                 setError('Incorrect password or the PDF is not encrypted. Please check the password and try again.');
             } else {
-                setError(`Error unlocking PDF: The file might not be encrypted or is corrupted.`);
+                setError('An error occurred while unlocking the PDF. The file might be corrupted.');
             }
         } finally {
             setIsLoading(false);
@@ -71,26 +78,33 @@ const UnlockPdf: React.FC = () => {
             </div>
 
             <div className="bg-white p-6 rounded-lg border border-slate-200 space-y-4 dark:bg-slate-800 dark:border-slate-700">
-                <input
-                    type="file"
-                    accept="application/pdf"
-                    onChange={handleFileChange}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[var(--theme-primary-light)] file:text-[var(--theme-primary)] hover:file:opacity-90 dark:file:bg-slate-700 dark:file:text-sky-300 dark:text-slate-400"
-                />
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">1. Upload Protected PDF</label>
+                    <input
+                        type="file"
+                        accept="application/pdf"
+                        onChange={handleFileChange}
+                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[var(--theme-primary-light)] file:text-[var(--theme-primary)] hover:file:opacity-90 dark:file:bg-slate-700 dark:file:text-sky-300 dark:text-slate-400"
+                    />
+                </div>
+
                 {file && (
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-slate-300">PDF Password</label>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-slate-300">2. Enter Password</label>
                         <input
                             type="password"
                             id="password"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
-                            placeholder="Enter the PDF password"
+                            placeholder="Enter the PDF's password"
                             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[var(--theme-primary)] focus:border-[var(--theme-primary)] sm:text-sm dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400"
                         />
                     </div>
                 )}
+                
                 {error && <p className="text-red-500 text-sm">{error}</p>}
+                {success && <p className="text-green-600 text-sm">{success}</p>}
+                
                 <button
                     onClick={handleUnlock}
                     disabled={isLoading || !file || !password}
@@ -99,7 +113,11 @@ const UnlockPdf: React.FC = () => {
                     {isLoading ? <><SpinnerIcon className="w-5 h-5 mr-2 animate-spin" /> Unlocking...</> : 'Unlock PDF and Download'}
                 </button>
             </div>
+             <p className="mt-8 text-center text-xs text-slate-500 dark:text-slate-400 italic">
+                All processing is done securely in your browser. Your files are never uploaded to a server.
+            </p>
         </div>
     );
 };
+
 export default UnlockPdf;

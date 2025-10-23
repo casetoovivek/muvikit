@@ -188,6 +188,39 @@ const StockScreener: React.FC = () => {
                     <MarkdownRenderer text={data} />
                 </div>
             )}
+            <div className="bg-white p-6 rounded-lg border border-slate-200 dark:bg-slate-800 dark:border-slate-700 space-y-6">
+                <section>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">What is an AI Stock Screener?</h2>
+                    <p className="mt-2 text-slate-600 dark:text-slate-300">An AI Stock Screener is a powerful tool that uses artificial intelligence and real-time search to provide a comprehensive fundamental analysis of a financial asset. Unlike traditional screeners with manual filters, our tool automates the entire research process. Simply enter a stock symbol, index, or forex pair, and the AI will generate a detailed report covering key metrics, pros and cons, peer comparisons, financial statements, and recent news, saving you hours of manual research.</p>
+                </section>
+
+                <section>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">How to Use This Tool</h2>
+                    <ol className="list-decimal list-inside mt-2 space-y-2 text-slate-600 dark:text-slate-300">
+                        <li><strong>Enter a Symbol:</strong> Type the stock ticker, index name, or forex pair you want to analyze (e.g., "AAPL", "NIFTY 50", "EURUSD").</li>
+                        <li><strong>Click Analyze:</strong> Press the "Analyze" button to send the request to the AI.</li>
+                        <li><strong>Review the Report:</strong> The AI will generate a detailed report below, structured in easy-to-read Markdown with tables for financial data.</li>
+                    </ol>
+                </section>
+
+                <section>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Frequently Asked Questions (FAQs)</h2>
+                    <div className="mt-2 space-y-3 text-slate-600 dark:text-slate-300">
+                        <div>
+                            <h3 className="font-semibold">Is this financial advice?</h3>
+                            <p><strong>Disclaimer:</strong> No. The information provided by this tool is for informational and educational purposes only. It is not investment advice. All financial decisions should be made with the help of a qualified professional.</p>
+                        </div>
+                        <div>
+                            <h3 className="font-semibold">Where does the data come from?</h3>
+                            <p>The AI uses Google's real-time search capabilities to access the latest publicly available financial data and news from across the web to compile its analysis.</p>
+                        </div>
+                        <div>
+                            <h3 className="font-semibold">How accurate is the data?</h3>
+                            <p>While the AI strives to provide the most current and accurate information, financial data can have delays or errors. Always verify critical information from official sources like company filings or reputable financial news outlets.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
     );
 };

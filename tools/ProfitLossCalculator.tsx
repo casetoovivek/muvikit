@@ -39,19 +39,19 @@ const ProfitLossCalculator: React.FC = () => {
           <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Trade Details</h3>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">Buy Price per Share</label>
-            <input type="number" value={buyPrice} onChange={e => setBuyPrice(e.target.value)} placeholder="e.g., 150.50" className="mt-1 w-full p-2 border border-slate-300 rounded-md bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400"/>
+            <input type="number" value={buyPrice} onChange={e => setBuyPrice(e.target.value)} placeholder="e.g., 150.50" className="mt-1 w-full p-2 border border-slate-300 rounded-md bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400"/>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">Sell Price per Share</label>
-            <input type="number" value={sellPrice} onChange={e => setSellPrice(e.target.value)} placeholder="e.g., 165.75" className="mt-1 w-full p-2 border border-slate-300 rounded-md bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400"/>
+            <input type="number" value={sellPrice} onChange={e => setSellPrice(e.target.value)} placeholder="e.g., 165.75" className="mt-1 w-full p-2 border border-slate-300 rounded-md bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400"/>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">Quantity (Shares)</label>
-            <input type="number" value={quantity} onChange={e => setQuantity(e.target.value)} placeholder="e.g., 100" className="mt-1 w-full p-2 border border-slate-300 rounded-md bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400"/>
+            <input type="number" value={quantity} onChange={e => setQuantity(e.target.value)} placeholder="e.g., 100" className="mt-1 w-full p-2 border border-slate-300 rounded-md bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400"/>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-slate-300">Commissions (Optional, total for buy & sell)</label>
-            <input type="number" value={commission} onChange={e => setCommission(e.target.value)} placeholder="e.g., 10" className="mt-1 w-full p-2 border border-slate-300 rounded-md bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400"/>
+            <input type="number" value={commission} onChange={e => setCommission(e.target.value)} placeholder="e.g., 10" className="mt-1 w-full p-2 border border-slate-300 rounded-md bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400"/>
           </div>
         </div>
         
@@ -66,6 +66,47 @@ const ProfitLossCalculator: React.FC = () => {
                 <p className={`text-3xl font-bold ${resultColor}`}>{percentageReturn.toFixed(2)}%</p>
             </div>
         </div>
+      </div>
+      <div className="bg-white p-6 rounded-lg border border-slate-200 dark:bg-slate-800 dark:border-slate-700 space-y-6">
+        <section>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">What is a Profit/Loss Calculator?</h2>
+          <p className="mt-2 text-slate-600 dark:text-slate-300">A Profit/Loss (P/L) Calculator is a fundamental tool for any trader or investor. It helps you quickly determine the exact financial outcome of a trade by calculating the difference between the total buy cost and the total sell value. This tool accounts for the price per share, the number of shares traded, and any commissions, giving you both the absolute monetary gain or loss and the percentage return on your investment.</p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">How to Use This Calculator</h2>
+          <ol className="list-decimal list-inside mt-2 space-y-2 text-slate-600 dark:text-slate-300">
+            <li><strong>Enter Buy Price:</strong> Input the price at which you bought each share.</li>
+            <li><strong>Enter Sell Price:</strong> Input the price at which you sold each share.</li>
+            <li><strong>Enter Quantity:</strong> Specify the total number of shares you traded.</li>
+            <li><strong>Add Commissions (Optional):</strong> Enter the total commission paid for both buying and selling to get a more accurate net result.</li>
+            <li><strong>View Your Result:</strong> The calculator instantly shows your total profit or loss and your percentage return.</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Benefits of Our P/L Calculator</h2>
+          <ul className="list-disc list-inside mt-2 space-y-2 text-slate-600 dark:text-slate-300">
+            <li><strong>Quick Analysis:</strong> Get instant calculations to understand your trade performance without manual math.</li>
+            <li><strong>Includes Costs:</strong> Factoring in commissions provides a true "net" profit or loss.</li>
+            <li><strong>Percentage Return:</strong> Understand your return on investment in percentage terms, which is crucial for comparing different trades.</li>
+            <li><strong>Versatile:</strong> Works for stocks, crypto, forex, or any asset with a buy and sell price.</li>
+          </ul>
+        </section>
+
+        <section>
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Frequently Asked Questions (FAQs)</h2>
+            <div className="mt-2 space-y-3 text-slate-600 dark:text-slate-300">
+              <div>
+                <h3 className="font-semibold">What are commissions?</h3>
+                <p>Commissions are fees charged by a broker for executing a trade (both buying and selling). They are an important cost to consider as they directly impact your net profitability.</p>
+              </div>
+              <div>
+                <h3 className="font-semibold">How is the percentage return calculated?</h3>
+                <p>The percentage return is calculated as (Total Profit or Loss) / (Total Buy Cost) * 100. This shows you how much you gained or lost relative to your initial investment.</p>
+              </div>
+            </div>
+        </section>
       </div>
     </div>
   );

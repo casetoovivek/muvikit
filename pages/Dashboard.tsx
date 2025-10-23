@@ -32,7 +32,10 @@ const Dashboard: React.FC<DashboardProps> = ({ tools, onSelectTool }) => {
         'File Conversion',
         'Finance & Business',
         'Developer',
-        'Other'
+        'Other',
+        'Career Tools',
+        'Government Services',
+        'About & Legal'
     ];
     // Return sorted categories
     return categoryOrder.filter(cat => grouped[cat]).map(category => ({
@@ -68,7 +71,7 @@ const Dashboard: React.FC<DashboardProps> = ({ tools, onSelectTool }) => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search for a tool (e.g., 'PDF', 'crop', 'password')..."
-            className="block w-full pl-12 pr-4 py-3 border border-slate-300 rounded-full text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)] focus:border-transparent dark:bg-slate-800 dark:border-slate-600 dark:text-white dark:placeholder-slate-400"
+            className="block w-full pl-12 pr-4 py-3 bg-white border border-slate-300 rounded-full text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[var(--theme-primary)] focus:border-transparent dark:bg-slate-800 dark:border-slate-600 dark:text-white dark:placeholder-slate-400"
           />
         </div>
       </div>
@@ -80,8 +83,8 @@ const Dashboard: React.FC<DashboardProps> = ({ tools, onSelectTool }) => {
           </h2>
           {filteredTools.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredTools.map(tool => (
-                <ToolCard key={tool.id} tool={tool} onSelectTool={onSelectTool} />
+              {filteredTools.map((tool, index) => (
+                <ToolCard key={tool.id} tool={tool} onSelectTool={onSelectTool} animationDelay={`${index * 50}ms`} />
               ))}
             </div>
           ) : (
@@ -96,8 +99,8 @@ const Dashboard: React.FC<DashboardProps> = ({ tools, onSelectTool }) => {
           <div key={category.name}>
             <h2 className="text-2xl font-bold text-slate-700 mb-4 dark:text-slate-200">{category.name}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {category.tools.map(tool => (
-                <ToolCard key={tool.id} tool={tool} onSelectTool={onSelectTool} />
+              {category.tools.map((tool, index) => (
+                <ToolCard key={tool.id} tool={tool} onSelectTool={onSelectTool} animationDelay={`${index * 50}ms`} />
               ))}
             </div>
           </div>

@@ -13,7 +13,20 @@ import {
     ChartIcon,
     WhatsAppIcon,
     CouponIcon,
-    StudentIcon
+    StudentIcon,
+    PdfEditIcon,
+    ResumeIcon,
+    GovIcon,
+    InfoIcon,
+    LegalIcon,
+    CalendarIcon,
+    CurrencyIcon,
+    PassportIcon,
+    EcomProfitIcon,
+    MathIcon,
+    HealthIcon,
+    SourceMindIcon,
+    QrCodeIcon,
 // FIX: Corrected import path for icons
 } from './components/icons';
 
@@ -62,15 +75,18 @@ import PdfToText from './tools/PdfToText';
 import PdfToJpg from './tools/PdfToJpg';
 import ImageToPdf from './tools/ImageToPdf';
 import ExtractImagesFromPdf from './tools/ExtractImagesFromPdf';
+import PdfTextEditor from './tools/PdfTextEditor';
 
 // New Image Tools
 import RemoveBackground from './tools/RemoveBackground';
+import PassportPhotoMaker from './tools/PassportPhotoMaker';
 import AiImageGenerator from './tools/AiImageGenerator';
 import UpscaleImage from './tools/UpscaleImage';
 import RemoveWatermark from './tools/RemoveWatermark';
 import RemoveObjectsFromPhoto from './tools/RemoveObjectsFromPhoto';
 import ImageToText from './tools/ImageToText';
 import CompressImage from './tools/CompressImage';
+import ReduceImageSize from './tools/ReduceImageSize';
 import MergeImages from './tools/MergeImages';
 
 // New AI Writing Tools
@@ -102,15 +118,30 @@ import InventoryOrderManagement from './tools/InventoryOrderManagement';
 import GoogleAnalyticsDashboard from './tools/GoogleAnalyticsDashboard';
 import KeywordResearchTool from './tools/KeywordResearchTool';
 import WhatsAppMarketingSuite from './tools/WhatsAppMarketingSuite';
+import EcommerceProfitCalculator from './tools/EcommerceProfitCalculator';
 
 // New Pro Trader Tools
+import AdvancedTraderJournal from './tools/AdvancedTraderJournal';
 import ProTradingJournal from './tools/ProTradingJournal';
 import AiChartAnalyst from './tools/AiChartAnalyst';
+import EconomicCalendar from './tools/EconomicCalendar';
+
+// New Career Tool
+import AIResumeBuilder from './tools/AIResumeBuilder';
 
 // Adblocker Modal
 import AdblockerModal from './components/AdblockerModal';
 import CouponFinder from './tools/CouponFinder';
 import StudentRoutineMaker from './tools/StudentRoutineMaker';
+import CscServiceDirectory from './tools/CscServiceDirectory';
+import SourceMind from './tools/SourceMind';
+
+// New Info Pages
+import AboutUs from './tools/AboutUs';
+import TermsAndConditions from './tools/TermsAndConditions';
+import CurrencyConverter from './tools/CurrencyConverter';
+import MathCalculators from './tools/MathCalculators';
+import HealthCalculators from './tools/HealthCalculators';
 
 
 // --- Tool Navigation Component ---
@@ -153,7 +184,9 @@ const ToolNavigation: React.FC<ToolNavigationProps> = ({ onPrevClick, onNextClic
 
 const tools: Tool[] = [
     // The Pro Trader Tools
-    { id: 'pro-trading-journal', name: 'Pro Trading Journal', description: 'A comprehensive journal to log, review, and analyze your trades.', icon: <TraderIcon />, component: ProTradingJournal, category: 'The Pro Trader' },
+    { id: 'economic-calendar', name: 'Economic Calendar', description: 'Real-time economic news calendar with impact analysis and alerts.', icon: <CalendarIcon />, component: EconomicCalendar, category: 'The Pro Trader' },
+    { id: 'financial-calculators', name: 'Financial Calculators', description: 'A comprehensive suite of 30+ calculators for investment, loans, taxes, and more.', icon: <FinanceIcon />, component: AdvancedTraderJournal, category: 'The Pro Trader' },
+    { id: 'pro-trading-journal', name: 'Advanced Trader Journal', description: 'Log, review, and analyze your trades with AI-powered insights and advanced analytics.', icon: <TraderIcon />, component: ProTradingJournal, category: 'The Pro Trader' },
     { id: 'stock-scanner', name: 'Stock Screener', description: 'AI-powered fundamental analysis of any stock, index or forex pair.', icon: <FinanceIcon />, component: StockScanner, category: 'The Pro Trader' },
     { id: 'ai-chart-analyst', name: 'AI Chart Analyst', description: 'Upload any chart image for AI-powered technical analysis and insights.', icon: <ChartIcon />, component: AiChartAnalyst, category: 'The Pro Trader' },
     { id: 'profit-loss-calculator', name: 'Profit/Loss Calculator', description: 'Calculate trade profit or loss.', icon: <FinanceIcon />, component: ProfitLossCalculator, category: 'The Pro Trader' },
@@ -162,6 +195,7 @@ const tools: Tool[] = [
     { id: 'position-size-calculator', name: 'Position Size Calculator', description: 'Calculate shares to buy based on risk.', icon: <FinanceIcon />, component: PositionSizeCalculator, category: 'The Pro Trader' },
     
     // E-commerce Tools
+    { id: 'ecommerce-profit-calculator', name: 'E-commerce Profitability Calculator', description: 'Calculate real-time profit & margins for any product on Amazon, Flipkart, and more, breaking down all marketplace fees.', icon: <EcomProfitIcon />, component: EcommerceProfitCalculator, category: 'E-commerce Tools' },
     { id: 'whatsapp-marketing-suite', name: 'WhatsApp Marketing Suite', description: 'Automate campaigns, abandoned carts, and manage chats.', icon: <WhatsAppIcon />, component: WhatsAppMarketingSuite, category: 'E-commerce Tools' },
     { id: 'google-analytics-dashboard', name: 'Google Trends Explorer', description: 'Explore real-time Google search trends for any keyword.', icon: <AnalyticsIcon />, component: GoogleAnalyticsDashboard, category: 'E-commerce Tools' },
     { id: 'keyword-research-tool', name: 'AI Keyword Research Tool', description: 'Discover keywords with search volume and sales potential.', icon: <KeywordIcon />, component: KeywordResearchTool, category: 'E-commerce Tools' },
@@ -169,6 +203,9 @@ const tools: Tool[] = [
     { id: 'inventory-order-management', name: 'Inventory & Order Management', description: 'Track products, manage orders, and export reports.', icon: <InventoryIcon />, component: InventoryOrderManagement, category: 'E-commerce Tools' },
 
     // Student Tools
+    { id: 'sourcemind', name: 'SourceMind AI', description: 'Upload documents, get answers, and generate content from your sources.', icon: <SourceMindIcon />, component: SourceMind, category: 'Student Tools' },
+    { id: 'math-calculators', name: 'Math Calculators', description: 'A comprehensive suite of math, statistics, and geometry calculators.', icon: <MathIcon />, component: MathCalculators, category: 'Student Tools' },
+    { id: 'health-calculators', name: 'Health & Fitness Calculators', description: 'A suite of calculators for fitness, pregnancy, and general health.', icon: <HealthIcon />, component: HealthCalculators, category: 'Student Tools' },
     { id: 'student-routine-maker', name: 'Student Routine Maker', description: 'Plan, track, and optimize your study schedule with AI suggestions.', icon: <StudentIcon />, component: StudentRoutineMaker, category: 'Student Tools' },
     { id: 'gpa-calculator', name: 'GPA Calculator', description: 'Calculate your Grade Point Average.', icon: <OtherIcon />, component: GpaCalculator, category: 'Student Tools' },
     { id: 'pomodoro-timer', name: 'Pomodoro Timer', description: 'Boost focus with a Pomodoro timer.', icon: <OtherIcon />, component: PomodoroTimer, category: 'Student Tools' },
@@ -184,15 +221,17 @@ const tools: Tool[] = [
     { id: 'image-cropper', name: 'Image Cropper', description: 'Crop images to your desired size.', icon: <ImageIcon />, component: ImageCropper, category: 'Image' },
     { id: 'image-converter', name: 'Image Converter', description: 'Convert images to different formats.', icon: <ImageIcon />, component: ImageConverter, category: 'Image' },
     { id: 'image-resizer', name: 'Image Resizer', description: 'Resize images to specific dimensions.', icon: <ImageIcon />, component: ImageResizer, category: 'Image' },
-    { id: 'qr-code-generator', name: 'QR Code Generator', description: 'Create QR codes from text or URLs.', icon: <ImageIcon />, component: QrCodeGenerator, category: 'Image' },
+    { id: 'qr-code-generator', name: 'QR Code Generator', description: 'Create QR codes from text or URLs.', icon: <QrCodeIcon />, component: QrCodeGenerator, category: 'Image' },
     { id: 'color-picker', name: 'Color Picker', description: 'Pick colors and get HEX/RGB/HSL codes.', icon: <ImageIcon />, component: ColorPicker, category: 'Image' },
     { id: 'remove-background', name: 'Remove Background', description: 'Automatically remove the background from an image.', icon: <ImageIcon />, component: RemoveBackground, category: 'Image' },
+    { id: 'passport-photo-maker', name: 'AI Passport Photo Maker', description: 'Create professional passport photos with custom sizes and backgrounds.', icon: <PassportIcon />, component: PassportPhotoMaker, category: 'Image' },
     { id: 'ai-image-generator', name: 'AI Image Generator', description: 'Create unique images from text prompts.', icon: <ImageIcon />, component: AiImageGenerator, category: 'Image' },
     { id: 'upscale-image', name: 'Upscale Image', description: 'Increase image resolution without losing quality.', icon: <ImageIcon />, component: UpscaleImage, category: 'Image' },
     { id: 'remove-watermark', name: 'Remove Watermark', description: 'Remove watermarks or unwanted logos from images.', icon: <ImageIcon />, component: RemoveWatermark, category: 'Image' },
     { id: 'remove-objects', name: 'Remove Objects from Photo', description: 'Erase unwanted objects or people from photos.', icon: <ImageIcon />, component: RemoveObjectsFromPhoto, category: 'Image' },
     { id: 'image-to-text', name: 'Image to Text (OCR)', description: 'Extract text from an image.', icon: <ImageIcon />, component: ImageToText, category: 'Image' },
     { id: 'compress-image', name: 'Compress Image', description: 'Reduce image file size while maintaining quality.', icon: <ImageIcon />, component: CompressImage, category: 'Image' },
+    { id: 'reduce-image-size', name: 'Reduce Image Size in KB', description: 'Compress images to a specific file size in KB.', icon: <ImageIcon />, component: ReduceImageSize, category: 'Image' },
     { id: 'merge-images', name: 'Merge Images', description: 'Combine multiple images into a single file.', icon: <ImageIcon />, component: MergeImages, category: 'Image' },
 
     // Developer Tools
@@ -203,11 +242,13 @@ const tools: Tool[] = [
     { id: 'password-generator', name: 'Password Generator', description: 'Create secure, random passwords.', icon: <DevIcon />, component: PasswordGenerator, category: 'Developer' },
     
     // Finance & Business Tools
+    { id: 'currency-converter', name: 'Currency Converter', description: 'Convert amounts between different currencies with real-time rates.', icon: <CurrencyIcon />, component: CurrencyConverter, category: 'Finance & Business' },
     { id: 'discount-calculator', name: 'Discount Calculator', description: 'Calculate final price after discount.', icon: <FinanceIcon />, component: DiscountCalculator, category: 'Finance & Business' },
     { id: 'loan-calculator', name: 'Loan Calculator', description: 'Estimate your monthly loan payments.', icon: <FinanceIcon />, component: LoanCalculator, category: 'Finance & Business' },
     { id: 'invoice-generator', name: 'Invoice Generator', description: 'Create professional invoices with your logo, tax, discounts, and export to PDF.', icon: <FinanceIcon />, component: InvoiceGenerator, category: 'Finance & Business' },
 
     // PDF Tools
+    { id: 'pdf-text-editor', name: 'PDF Text Editor', description: 'Edit text directly in your PDF documents.', icon: <PdfEditIcon />, component: PdfTextEditor, category: 'PDF Tools' },
     { id: 'merge-pdf', name: 'Merge PDF', description: 'Combine multiple PDF files into one.', icon: <PdfIcon />, component: MergePdf, category: 'PDF Tools' },
     { id: 'split-pdf', name: 'Split PDF', description: 'Extract pages from a PDF file.', icon: <PdfIcon />, component: SplitPdf, category: 'PDF Tools' },
     { id: 'compress-pdf', name: 'Compress PDF', description: 'Reduce the file size of your PDF.', icon: <PdfIcon />, component: CompressPdf, category: 'PDF Tools' },
@@ -251,6 +292,16 @@ const tools: Tool[] = [
     { id: 'unit-converter', name: 'Unit Converter', description: 'Convert between different units.', icon: <OtherIcon />, component: UnitConverter, category: 'Other' },
     { id: 'todo-list', name: 'To-Do List', description: 'A simple to-do list to stay organized.', icon: <OtherIcon />, component: ToDoList, category: 'Other' },
     { id: 'universal-file-analyzer', name: 'Universal File Analyzer', description: 'Analyze any document (PDF, image) to get a structured summary.', icon: <AnalyzeIcon />, component: UniversalFileAnalyzer, category: 'Other' },
+
+    // Career Tools (moved to bottom)
+    { id: 'ai-resume-builder', name: 'AI Resume Builder', description: 'Create a professional resume with AI-powered content suggestions, scoring, and templates.', icon: <ResumeIcon />, component: AIResumeBuilder, category: 'Career Tools' },
+
+    // Government Services (moved to bottom)
+    { id: 'csc-service-directory', name: 'CSC Service Directory', description: 'Find information and links for various government e-services.', icon: <GovIcon />, component: CscServiceDirectory, category: 'Government Services' },
+    
+    // New category and tools
+    { id: 'about-us', name: 'About Us', description: 'Learn more about Muvikit Technologies and our mission.', icon: <InfoIcon />, component: AboutUs, category: 'About & Legal' },
+    { id: 'terms-and-conditions', name: 'Terms & Conditions', description: 'Read the terms and conditions for using our services.', icon: <LegalIcon />, component: TermsAndConditions, category: 'About & Legal' },
 ];
 
 function App() {
@@ -316,9 +367,13 @@ function App() {
       <Header onLogoClick={handleGoHome} theme={theme} toggleTheme={toggleTheme} />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar tools={tools} selectedTool={selectedTool} onSelectTool={handleSelectTool} />
-        <main className="flex-1 p-6 lg:p-10 overflow-y-auto">
+        <main className="flex-1 p-6 lg:p-10 overflow-y-auto text-slate-800 dark:text-slate-200">
           {CurrentTool ? (
             <div>
+              <button onClick={handleGoHome} className="mb-6 flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[var(--theme-primary)] dark:text-slate-400 dark:hover:text-sky-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 17l-5-5m0 0l5-5m-5 5h12" /></svg>
+                  Back to All Tools
+              </button>
               <CurrentTool />
               {prevTool && nextTool && (
                 <ToolNavigation

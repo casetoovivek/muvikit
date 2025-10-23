@@ -117,6 +117,42 @@ const SplitPdf: React.FC = () => {
                     {isLoading ? <><SpinnerIcon className="w-5 h-5 mr-2 animate-spin" /> Splitting...</> : 'Split PDF and Download'}
                 </button>
             </div>
+            <div className="bg-white p-6 rounded-lg border border-slate-200 dark:bg-slate-800 dark:border-slate-700 space-y-6">
+                <section>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">What is a PDF Splitter?</h2>
+                    <p className="mt-2 text-slate-600 dark:text-slate-300">A PDF Splitter is a tool that allows you to extract one or more pages from a PDF document and save them as a new, separate PDF file. This is useful when you only need a specific chapter from a large book, a single invoice from a monthly statement, or want to remove unnecessary pages from a document before sharing it.</p>
+                </section>
+                <section>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">How to Use This Tool</h2>
+                    <ol className="list-decimal list-inside mt-2 space-y-2 text-slate-600 dark:text-slate-300">
+                        <li><strong>Upload Your PDF:</strong> Select the PDF file you want to split from your device.</li>
+                        <li><strong>Specify Page Ranges:</strong> In the "Pages to Extract" field, enter the page numbers you want to keep. You can enter single pages (e.g., 5), ranges (e.g., 1-3), or a combination (e.g., 1-3, 5, 8-10).</li>
+                        <li><strong>Split and Download:</strong> Click the "Split PDF and Download" button. A new PDF containing only your selected pages will be generated and downloaded.</li>
+                    </ol>
+                </section>
+                <section>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Benefits of Our PDF Splitter</h2>
+                    <ul className="list-disc list-inside mt-2 space-y-2 text-slate-600 dark:text-slate-300">
+                        <li><strong>Secure and Private:</strong> All processing happens in your browser. Your files are never uploaded to our servers.</li>
+                        <li><strong>Flexible Page Selection:</strong> Extract any combination of pages or ranges to create the exact document you need.</li>
+                        <li><strong>Reduce File Size:</strong> By removing unnecessary pages, you can create smaller, easier-to-share files.</li>
+                        <li><strong>Free and Unlimited:</strong> Split as many PDFs as you need without any cost or limitations.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Frequently Asked Questions (FAQs)</h2>
+                    <div className="mt-2 space-y-3 text-slate-600 dark:text-slate-300">
+                        <div>
+                            <h3 className="font-semibold">Is my document safe?</h3>
+                            <p>Yes. Because the splitting process is done entirely on your computer, your documents remain private and secure.</p>
+                        </div>
+                        <div>
+                            <h3 className="font-semibold">Can I split a password-protected PDF?</h3>
+                            <p>No, you must first remove the password from the PDF before you can split it. You can use our "Unlock PDF" tool for this purpose.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
     );
 };

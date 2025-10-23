@@ -9,7 +9,8 @@ const ImageToPdf: React.FC = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
-      const imagePromises = files.map(file => {
+      // FIX: Explicitly type the 'file' parameter in the callback to resolve 'unknown' type error.
+      const imagePromises = files.map((file: File) => {
         return new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
           reader.onload = (event) => {

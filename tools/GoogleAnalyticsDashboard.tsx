@@ -105,11 +105,15 @@ const GoogleTrendsExplorer: React.FC = () => {
                 config: { tools: [{ googleSearch: {} }] }
             });
 
-            const parsedData = JSON.parse(response.text);
-            setTrendData(parsedData);
-        } catch (err) {
+            try {
+                const parsedData = JSON.parse(response.text);
+                setTrendData(parsedData);
+            } catch (parseError) {
+                throw new Error("AI returned an invalid response format. Please try again.");
+            }
+        } catch (err: any) {
             console.error(err);
-            setError("Failed to fetch trend data. The AI may be busy or the topic may not have enough data. Please try again.");
+            setError(err.message || "Failed to fetch trend data. The AI may be busy or the topic may not have enough data.");
         } finally {
             setIsLoading(false);
         }
@@ -129,7 +133,7 @@ const GoogleTrendsExplorer: React.FC = () => {
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}
                         placeholder="Enter a search term (e.g., 'AI startups')"
-                        className="flex-grow w-full px-4 py-2 bg-white text-slate-900 border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-[var(--theme-primary)] focus:border-[var(--theme-primary)] dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+                        className="flex-grow w-full px-4 py-2 bg-white text-slate-900 border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-[var(--theme-primary)] focus:border-[var(--theme-primary)] dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100"
                     />
                     <button onClick={handleSearch} disabled={isLoading} className="px-5 py-2 bg-[var(--theme-primary)] text-white font-semibold rounded-lg shadow-md hover:opacity-90 disabled:bg-gray-400 flex items-center justify-center dark:disabled:bg-slate-600">
                          {isLoading ? <SpinnerIcon className="w-5 h-5 animate-spin" /> : <SearchIcon className="w-5 h-5"/>}

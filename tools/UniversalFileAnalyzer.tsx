@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { GoogleGenAI, Type } from "@google/genai";
-import jsPDF from 'jspdf';
+import { jsPDF } from 'jspdf';
 // FIX: Changed import to use jspdf-autotable as a function and removed module augmentation, resolving a module not found error.
 import autoTable from 'jspdf-autotable';
 import { SpinnerIcon, PdfFileIcon, ExcelFileIcon } from '../components/icons';
@@ -12,6 +12,8 @@ import { SpinnerIcon, PdfFileIcon, ExcelFileIcon } from '../components/icons';
 declare global {
     interface Window {
         XLSX: any;
+        mammoth: any;
+        pptx: any;
     }
 }
 
@@ -22,6 +24,7 @@ const UniversalFileAnalyzer: React.FC = () => {
     const [analysisResult, setAnalysisResult] = useState('');
     const [summarizedData, setSummarizedData] = useState<any[]>([]);
     const [activeTab, setActiveTab] = useState<'analysis' | 'summary'>('analysis');
+    const [status, setStatus] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const resetState = () => {
@@ -37,11 +40,7 @@ const UniversalFileAnalyzer: React.FC = () => {
     };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        setError('');
-        setAnalysisResult('');
-        setFile(null);
-        setSummarizedData([]);
-        setActiveTab('analysis');
+        resetState();
 
         const selectedFile = e.target.files?.[0];
         if (!selectedFile) return;
@@ -53,6 +52,15 @@ const UniversalFileAnalyzer: React.FC = () => {
         }
 
         setFile(selectedFile);
+    };
+    
+    const fileToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve((reader.result as string).split(',')[1]);
+            reader.onerror = error => reject(error);
+        });
     };
 
     const handleAnalyze = async () => {
@@ -66,85 +74,130 @@ const UniversalFileAnalyzer: React.FC = () => {
         setSummarizedData([]);
         setActiveTab('analysis');
 
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = async () => {
-            try {
-                const base64Data = (reader.result as string).split(',')[1];
-                const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+        try {
+            const fileType = file.type;
+            const fileName = file.name;
+            let contentForAI: { text: string } | { inlineData: { mimeType: string; data: string } };
+            let analysisPrompt: string;
+            const isOfficeDoc = fileName.endsWith('.docx') || fileName.endsWith('.xlsx') || fileName.endsWith('.xls') || fileName.endsWith('.pptx');
+
+            if (fileType.startsWith('image/') || fileType === 'application/pdf') {
+                setStatus(`Reading ${fileType.split('/')[0]} file...`);
+                const base64Data = await fileToBase64(file);
+                contentForAI = { inlineData: { mimeType: fileType, data: base64Data } };
+                analysisPrompt = `You are an expert file analyst. Analyze the attached file named '${fileName}'.`;
+
+            } else if (isOfficeDoc || fileType.startsWith('text/')) {
+                let extractedText = '';
+                const arrayBuffer = await file.arrayBuffer();
                 
-                const schema = {
-                  type: Type.OBJECT,
-                  properties: {
-                    analysisReport: {
-                      type: Type.STRING,
-                      description: 'A detailed, well-organized analysis of the file content in Markdown format.'
-                    },
-                    hasSummarizableData: {
-                      type: Type.BOOLEAN,
-                      description: 'Set to true only if the file contains clear numerical, tabular, or financial data (like an invoice, sales report, CSV with numbers) that can be summarized into a table.'
-                    },
-                    summarizedData: {
-                      type: Type.STRING,
-                      description: 'If hasSummarizableData is true, extract the key data and return it as a JSON string representing an array of objects. Each object is a row. Use concise keys for object keys that will make sense as table headers (e.g., "Item", "Quantity", "Amount"). If no summarizable data is found, return an empty JSON array string, i.e., "[]".',
-                    }
-                  },
-                  required: ['analysisReport', 'hasSummarizableData', 'summarizedData']
-                };
-
-                const prompt = `You are an expert file analyst. Analyze the attached file named '${file.name}'.
-                1. Provide a detailed analysis in Markdown format for the 'analysisReport' field.
-                2. Examine the file for any tabular, numerical, or financial data (like from an invoice, bill, or CSV).
-                3. If such data exists, set 'hasSummarizableData' to true and populate the 'summarizedData' field with a JSON string representing an array of objects, where each object is a row from the data.
-                4. If no such data exists, set 'hasSummarizableData' to false and provide an empty JSON array string "[]" for 'summarizedData'.`;
-                
-                const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-pro',
-                    contents: { parts: [ { inlineData: { data: base64Data, mimeType: file.type } }, { text: prompt } ] },
-                    config: {
-                        responseMimeType: "application/json",
-                        responseSchema: schema,
-                    }
-                });
-
-                const result = JSON.parse(response.text);
-
-                setAnalysisResult(result.analysisReport || 'No analysis was generated.');
-                if (result.hasSummarizableData && result.summarizedData) {
-                    try {
-                        const parsedSummary = JSON.parse(result.summarizedData);
-                        if (Array.isArray(parsedSummary) && parsedSummary.length > 0) {
-                            setSummarizedData(parsedSummary);
-                            setActiveTab('summary');
-                        } else {
-                            setSummarizedData([]);
+                if (fileName.endsWith('.docx')) {
+                    setStatus('Extracting text from Word document...');
+                    const result = await window.mammoth.extractRawText({ arrayBuffer });
+                    extractedText = result.value;
+                } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+                    setStatus('Extracting text from Excel spreadsheet...');
+                    const workbook = window.XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
+                    workbook.SheetNames.forEach((sheetName: string) => {
+                        const worksheet = workbook.Sheets[sheetName];
+                        const csvText = window.XLSX.utils.sheet_to_csv(worksheet);
+                        extractedText += `--- Sheet: ${sheetName} ---\n${csvText}\n\n`;
+                    });
+                } else if (fileName.endsWith('.pptx')) {
+                    setStatus('Extracting text from PowerPoint presentation...');
+                    const pptx = new window.pptx();
+                    const presentation = await pptx.load(file);
+                    for (const slide of presentation.slides) {
+                        extractedText += `--- Slide ${slide.number} ---\n`;
+                        for (const element of slide.elements) {
+                            if (element.type === 'text') {
+                                extractedText += element.text + '\n';
+                            }
                         }
-                    } catch (e) {
-                        console.error("Failed to parse summarizedData JSON string:", e);
+                        extractedText += '\n';
+                    }
+                } else { // Plain text
+                    setStatus('Reading text file...');
+                    extractedText = await file.text();
+                }
+
+                if (!extractedText.trim()) {
+                    throw new Error("Could not extract any text from the document. It might be empty or in an unsupported format.");
+                }
+
+                contentForAI = { text: `File Content:\n"""\n${extractedText}\n"""` };
+                analysisPrompt = `You are an expert file analyst. Analyze the following text content extracted from a file named '${fileName}'.`;
+
+            } else {
+                throw new Error(`Unsupported file type: ${fileType || 'unknown'}. This tool currently supports images, PDFs, text, and standard office documents.`);
+            }
+
+            // --- Common Gemini Call Logic ---
+            setStatus('Asking AI for analysis...');
+            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+
+            const schema = {
+              type: Type.OBJECT,
+              properties: {
+                analysisReport: { type: Type.STRING, description: 'A detailed, well-organized analysis of the file content in Markdown format.' },
+                hasSummarizableData: { type: Type.BOOLEAN, description: 'Set to true only if the file contains clear numerical, tabular, or financial data (like an invoice, sales report, CSV with numbers) that can be summarized into a table.' },
+                summarizedData: { type: Type.STRING, description: 'If hasSummarizableData is true, extract the key data and return it as a JSON string representing an array of objects. Each object is a row. Use concise keys for object keys that will make sense as table headers (e.g., "Item", "Quantity", "Amount"). If no summarizable data is found, return an empty JSON array string, i.e., "[]".' }
+              },
+              required: ['analysisReport', 'hasSummarizableData', 'summarizedData']
+            };
+
+            const fullPrompt = `${analysisPrompt}
+            1. Provide a detailed analysis in Markdown format for the 'analysisReport' field.
+            2. Examine the file for any tabular, numerical, or financial data.
+            3. If such data exists, set 'hasSummarizableData' to true and populate the 'summarizedData' field with a JSON string representing an array of objects.
+            4. If no such data exists, set 'hasSummarizableData' to false and provide an empty JSON array string "[]" for 'summarizedData'.`;
+
+            const response = await ai.models.generateContent({
+                model: 'gemini-2.5-pro',
+                contents: { parts: [ contentForAI as any, { text: fullPrompt } ] },
+                config: {
+                    responseMimeType: "application/json",
+                    responseSchema: schema,
+                }
+            });
+
+            const result = JSON.parse(response.text);
+
+            setAnalysisResult(result.analysisReport || 'No analysis was generated.');
+            if (result.hasSummarizableData && result.summarizedData) {
+                try {
+                    const parsedSummary = JSON.parse(result.summarizedData);
+                    if (Array.isArray(parsedSummary) && parsedSummary.length > 0) {
+                        setSummarizedData(parsedSummary);
+                        setActiveTab('summary');
+                    } else {
                         setSummarizedData([]);
                     }
-                } else {
+                } catch (e) {
+                    console.error("Failed to parse summarizedData JSON string:", e);
                     setSummarizedData([]);
                 }
-            } catch (e) {
-                setError('An error occurred during analysis. The content may have violated a safety policy or the file format may not be fully interpretable. Please try a different file.');
-                console.error(e);
-            } finally {
-                setIsLoading(false);
+            } else {
+                setSummarizedData([]);
             }
-        };
-        reader.onerror = () => {
-            setError('Failed to read the file.');
+
+        } catch (e: any) {
+            setError(e.message || 'An error occurred during analysis.');
+            console.error(e);
+        } finally {
             setIsLoading(false);
-        };
+            setStatus('');
+        }
     };
+
 
     const handleExportPdf = () => {
         if (summarizedData.length === 0) return;
 
         const doc = new jsPDF();
         const head = [Object.keys(summarizedData[0])];
-        const body = summarizedData.map(row => Object.values(row).map(String));
+        // FIX: Explicitly convert each cell to a string using a map function `(cell) => String(cell)` instead of passing `String` directly. This avoids potential type ambiguity and ensures all data passed to the PDF generator is in the correct format.
+        const body = summarizedData.map(row => Object.values(row).map(cell => String(cell)));
 
         doc.text("Summarized Data", 14, 15);
         // FIX: Changed doc.autoTable to autoTable(doc, ...) to match the modern functional usage of jspdf-autotable.
@@ -256,7 +309,7 @@ const UniversalFileAnalyzer: React.FC = () => {
                         disabled={isLoading || !file}
                         className="w-full px-6 py-3 bg-[var(--theme-primary)] text-white font-semibold rounded-lg shadow-md hover:opacity-90 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center dark:disabled:bg-slate-600"
                     >
-                        {isLoading ? <><SpinnerIcon className="w-5 h-5 mr-2 animate-spin" /> Analyzing...</> : '2. Analyze with AI'}
+                        {isLoading ? <><SpinnerIcon className="w-5 h-5 mr-2 animate-spin" /> {status || 'Analyzing...'}</> : '2. Analyze with AI'}
                     </button>
                     {error && <p className="mt-2 text-red-600 dark:text-red-400 text-sm">{error}</p>}
                 </div>
@@ -276,7 +329,7 @@ const UniversalFileAnalyzer: React.FC = () => {
                     {isLoading && (
                         <div className="flex flex-col items-center justify-center h-full pt-12">
                             <SpinnerIcon className="w-10 h-10 animate-spin text-[var(--theme-primary)]" />
-                            <p className="mt-4 text-slate-500 dark:text-slate-400">AI is analyzing your file...</p>
+                            <p className="mt-4 text-slate-500 dark:text-slate-400">{status || 'AI is analyzing your file...'}</p>
                         </div>
                     )}
 

@@ -1,0 +1,23 @@
+{
+  "name": "Muvikit - Daily Digital Tools",
+  "short_name": "Muvikit",
+  "description": "A versatile collection of daily digital tools for students, creators, and professionals. Features a suite of utilities including an image cropper, text analyzer, and more to streamline your digital tasks.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1e293b",
+  "theme_color": "#0d3e80",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/3s3g9zR/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://i.ibb.co/p3g3pYf/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

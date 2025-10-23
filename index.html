@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Muvikit</title>
+
+  <!-- PWA Manifest and Theme Color -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0d3e80" />
+  <link rel="apple-touch-icon" href="https://i.ibb.co/3s3g9zR/icon-192x192.png" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://unpkg.com/react-image-crop/dist/ReactCrop.css" />
   <link rel="stylesheet" href="https://unpkg.com/react-circular-progressbar/dist/styles.css" />
@@ -29,7 +35,8 @@
     "pdfjs-dist/build/pdf.mjs": "https://aistudiocdn.com/pdfjs-dist@^4.4.168/build/pdf.mjs",
     "tesseract.js": "https://aistudiocdn.com/tesseract.js@^5.1.0",
     "react-signature-canvas": "https://aistudiocdn.com/react-signature-canvas@^1.0.6",
-    "jspdf-autotable": "https://aistudiocdn.com/jspdf-autotable@^5.0.2"
+    "jspdf-autotable": "https://aistudiocdn.com/jspdf-autotable@^5.0.2",
+    "js-base64": "https://aistudiocdn.com/js-base64@^3.7.8"
   }
 }
 </script>
@@ -71,6 +78,22 @@
   .dark ::-webkit-scrollbar-thumb {
     background-color: #475569; /* slate-600 */
     border-color: #1e293b; /* slate-800 */
+  }
+
+  /* Animation for tool cards */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in-up {
+    opacity: 0; /* Initial state */
+    animation: fadeInUp 0.5s ease-out forwards;
   }
 </style>
 </head>

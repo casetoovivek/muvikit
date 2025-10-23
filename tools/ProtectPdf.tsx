@@ -7,12 +7,14 @@ const ProtectPdf: React.FC = () => {
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
         if (selectedFile && selectedFile.type === 'application/pdf') {
             setFile(selectedFile);
             setError('');
+            setSuccess('');
         } else {
             setFile(null);
             setError('Please select a valid PDF file.');
@@ -26,30 +28,44 @@ const ProtectPdf: React.FC = () => {
         }
         setIsLoading(true);
         setError('');
+        setSuccess('');
 
         try {
             const pdfBytes = await file.arrayBuffer();
-            const pdfDoc = await PDFDocument.load(pdfBytes);
+            // Load the document, ignoring existing encryption to check it manually
+            const pdfDoc = await PDFDocument.load(pdfBytes, { ignoreEncryption: true });
             
-            pdfDoc.encrypt({
-                userPassword: password,
-                ownerPassword: password,
-                permissions: {},
-            });
+            // Check if the document was already encrypted.
+            if (pdfDoc.isEncrypted) {
+                throw new Error('This PDF is already password-protected. Please use an unlocked file.');
+            }
 
-            const protectedPdfBytes = await pdfDoc.save();
+            // The `.encrypt()` method does not exist in this version of pdf-lib.
+            // Encryption options are passed directly to the `save` method.
+            const protectedPdfBytes = await pdfDoc.save({
+                userPassword: password,
+                ownerPassword: password, // Use same for simplicity to lock all permissions
+            });
 
             const blob = new Blob([protectedPdfBytes], { type: 'application/pdf' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = `protected_${file.name}`;
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            
+            setSuccess(`Successfully protected "${file.name}"! The download should start automatically.`);
+            const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+            if(fileInput) fileInput.value = '';
+            setFile(null);
+            setPassword('');
 
         } catch (err: any) {
             console.error(err);
-            setError(`Error protecting PDF: ${err.message}`);
+            setError(err.message || 'An error occurred while protecting the PDF. The file might be corrupted.');
         } finally {
             setIsLoading(false);
         }
@@ -59,30 +75,37 @@ const ProtectPdf: React.FC = () => {
         <div className="space-y-6">
             <div className="pb-4 border-b border-gray-200 dark:border-slate-700">
                 <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100">Protect PDF</h2>
-                <p className="mt-1 text-lg text-slate-500 dark:text-slate-400">Add a password to your PDF file.</p>
+                <p className="mt-1 text-lg text-slate-500 dark:text-slate-400">Add a password to your PDF file to secure it.</p>
             </div>
 
             <div className="bg-white p-6 rounded-lg border border-slate-200 space-y-4 dark:bg-slate-800 dark:border-slate-700">
-                <input
-                    type="file"
-                    accept="application/pdf"
-                    onChange={handleFileChange}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[var(--theme-primary-light)] file:text-[var(--theme-primary)] hover:file:opacity-90 dark:file:bg-slate-700 dark:file:text-sky-300 dark:text-slate-400"
-                />
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-slate-300">1. Upload PDF</label>
+                    <input
+                        type="file"
+                        accept="application/pdf"
+                        onChange={handleFileChange}
+                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[var(--theme-primary-light)] file:text-[var(--theme-primary)] hover:file:opacity-90 dark:file:bg-slate-700 dark:file:text-sky-300 dark:text-slate-400"
+                    />
+                </div>
+
                 {file && (
                     <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-slate-300">Password</label>
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-slate-300">2. Set a Password</label>
                         <input
                             type="password"
                             id="password"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
-                            placeholder="Enter password"
+                            placeholder="Enter a strong password"
                             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[var(--theme-primary)] focus:border-[var(--theme-primary)] sm:text-sm dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400"
                         />
                     </div>
                 )}
+                
                 {error && <p className="text-red-500 text-sm">{error}</p>}
+                {success && <p className="text-green-600 text-sm">{success}</p>}
+                
                 <button
                     onClick={handleProtect}
                     disabled={isLoading || !file || !password}
@@ -91,6 +114,9 @@ const ProtectPdf: React.FC = () => {
                     {isLoading ? <><SpinnerIcon className="w-5 h-5 mr-2 animate-spin" /> Protecting...</> : 'Protect PDF and Download'}
                 </button>
             </div>
+            <p className="mt-8 text-center text-xs text-slate-500 dark:text-slate-400 italic">
+                Client-side encryption is suitable for general use but not recommended for highly sensitive documents.
+            </p>
         </div>
     );
 };

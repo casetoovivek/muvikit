@@ -115,10 +115,10 @@ const InvoiceGenerator: React.FC = () => {
   const addressInputs = (title: string, address: Address, setter: React.Dispatch<React.SetStateAction<Address>>) => (
     <div className="bg-white p-4 rounded-lg border space-y-2 dark:bg-slate-800 dark:border-slate-700">
       <h3 className="font-semibold text-slate-700 dark:text-slate-200">{title}</h3>
-      <input value={address.name} onChange={e => handleAddressChange(setter, 'name', e.target.value)} placeholder="Name / Company" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
-      <input value={address.address} onChange={e => handleAddressChange(setter, 'address', e.target.value)} placeholder="Address" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
-      <input value={address.city} onChange={e => handleAddressChange(setter, 'city', e.target.value)} placeholder="City, State, Zip" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
-      <input value={address.country} onChange={e => handleAddressChange(setter, 'country', e.target.value)} placeholder="Country" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
+      <input value={address.name} onChange={e => handleAddressChange(setter, 'name', e.target.value)} placeholder="Name / Company" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
+      <input value={address.address} onChange={e => handleAddressChange(setter, 'address', e.target.value)} placeholder="Address" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
+      <input value={address.city} onChange={e => handleAddressChange(setter, 'city', e.target.value)} placeholder="City, State, Zip" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
+      <input value={address.country} onChange={e => handleAddressChange(setter, 'country', e.target.value)} placeholder="Country" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
     </div>
   );
 
@@ -142,7 +142,7 @@ const InvoiceGenerator: React.FC = () => {
                  <h3 className="font-semibold text-slate-700 dark:text-slate-200">Settings</h3>
                  <div className="flex gap-2">
                     <label className="flex-1 dark:text-slate-300">Currency:
-                        <select value={currency} onChange={e => setCurrency(e.target.value)} className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-white">
+                        <select value={currency} onChange={e => setCurrency(e.target.value)} className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100">
                             <option value="$">USD ($)</option>
                             <option value="€">EUR (€)</option>
                             <option value="£">GBP (£)</option>
@@ -164,30 +164,30 @@ const InvoiceGenerator: React.FC = () => {
                 </label>
                 {useShipping && (
                     <div className="space-y-2 pt-2">
-                        <input value={shipTo.name} onChange={e => handleAddressChange(setShipTo, 'name', e.target.value)} placeholder="Name / Company" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
-                        <input value={shipTo.address} onChange={e => handleAddressChange(setShipTo, 'address', e.target.value)} placeholder="Address" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
-                        <input value={shipTo.city} onChange={e => handleAddressChange(setShipTo, 'city', e.target.value)} placeholder="City, State, Zip" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
-                        <input value={shipTo.country} onChange={e => handleAddressChange(setShipTo, 'country', e.target.value)} placeholder="Country" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
+                        <input value={shipTo.name} onChange={e => handleAddressChange(setShipTo, 'name', e.target.value)} placeholder="Name / Company" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
+                        <input value={shipTo.address} onChange={e => handleAddressChange(setShipTo, 'address', e.target.value)} placeholder="Address" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
+                        <input value={shipTo.city} onChange={e => handleAddressChange(setShipTo, 'city', e.target.value)} placeholder="City, State, Zip" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
+                        <input value={shipTo.country} onChange={e => handleAddressChange(setShipTo, 'country', e.target.value)} placeholder="Country" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
                     </div>
                 )}
             </div>
 
             <div className="bg-white p-4 rounded-lg border space-y-2 dark:bg-slate-800 dark:border-slate-700">
                 <h3 className="font-semibold text-slate-700 dark:text-slate-200">Invoice Details</h3>
-                <input value={invoiceNumber} onChange={e => setInvoiceNumber(e.target.value)} placeholder="Invoice #" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
-                <input value={poNumber} onChange={e => setPoNumber(e.target.value)} placeholder="PO Number" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
-                <input type="date" value={date} onChange={e => setDate(e.target.value)} className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-white" />
-                <input type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-white" />
-                <input value={paymentTerms} onChange={e => setPaymentTerms(e.target.value)} placeholder="Payment Terms" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
+                <input value={invoiceNumber} onChange={e => setInvoiceNumber(e.target.value)} placeholder="Invoice #" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
+                <input value={poNumber} onChange={e => setPoNumber(e.target.value)} placeholder="PO Number" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
+                <input type="date" value={date} onChange={e => setDate(e.target.value)} className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100" />
+                <input type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100" />
+                <input value={paymentTerms} onChange={e => setPaymentTerms(e.target.value)} placeholder="Payment Terms" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
             </div>
 
             <div className="bg-white p-4 rounded-lg border space-y-2 dark:bg-slate-800 dark:border-slate-700">
                 <h3 className="font-semibold text-slate-700 dark:text-slate-200">Items</h3>
                 {items.map(item => (
                     <div key={item.id} className="grid grid-cols-12 gap-1 items-center">
-                        <input value={item.description} onChange={e => handleItemChange(item.id, 'description', e.target.value)} placeholder="Description" className="col-span-5 p-1 border border-slate-300 rounded text-sm bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
-                        <input value={item.quantity} onChange={e => handleItemChange(item.id, 'quantity', e.target.value)} type="number" placeholder="Qty" className="col-span-2 p-1 border border-slate-300 rounded text-sm bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
-                        <input value={item.rate} onChange={e => handleItemChange(item.id, 'rate', e.target.value)} type="number" placeholder="Rate" className="col-span-3 p-1 border border-slate-300 rounded text-sm bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:placeholder-slate-400" />
+                        <input value={item.description} onChange={e => handleItemChange(item.id, 'description', e.target.value)} placeholder="Description" className="col-span-5 p-1 border border-slate-300 rounded text-sm bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
+                        <input value={item.quantity} onChange={e => handleItemChange(item.id, 'quantity', e.target.value)} type="number" placeholder="Qty" className="col-span-2 p-1 border border-slate-300 rounded text-sm bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
+                        <input value={item.rate} onChange={e => handleItemChange(item.id, 'rate', e.target.value)} type="number" placeholder="Rate" className="col-span-3 p-1 border border-slate-300 rounded text-sm bg-white text-slate-900 placeholder-slate-400 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100 dark:placeholder-slate-400" />
                         <button onClick={() => removeItem(item.id)} className="col-span-2 flex justify-center items-center h-8 bg-red-100 text-red-600 rounded hover:bg-red-200 dark:bg-red-900/50 dark:text-red-400 dark:hover:bg-red-900/80">
                            <TrashIcon className="w-4 h-4" />
                         </button>
@@ -201,21 +201,21 @@ const InvoiceGenerator: React.FC = () => {
                  <div className="flex gap-2">
                     <label className="flex-1 dark:text-slate-300">Discount:
                         <div className="flex">
-                            <input value={discountValue} onChange={e => setDiscountValue(e.target.value)} type="number" className="w-full p-2 border border-slate-300 rounded-l bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-white"/>
-                            <select value={discountType} onChange={e => setDiscountType(e.target.value as any)} className="p-2 border-t border-b border-r border-slate-300 rounded-r bg-slate-50 text-slate-900 dark:bg-slate-600 dark:border-slate-600 dark:text-white">
+                            <input value={discountValue} onChange={e => setDiscountValue(e.target.value)} type="number" className="w-full p-2 border border-slate-300 rounded-l bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100"/>
+                            <select value={discountType} onChange={e => setDiscountType(e.target.value as any)} className="p-2 border-t border-b border-r border-slate-300 rounded-r bg-slate-50 text-slate-900 dark:bg-slate-600 dark:border-slate-600 dark:text-slate-100">
                                 <option value="percent">%</option>
                                 <option value="amount">{currency}</option>
                             </select>
                         </div>
                     </label>
-                    <label className="flex-1 dark:text-slate-300">Tax (%):<input value={taxRate} onChange={e => setTaxRate(e.target.value)} type="number" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-white"/></label>
+                    <label className="flex-1 dark:text-slate-300">Tax (%):<input value={taxRate} onChange={e => setTaxRate(e.target.value)} type="number" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100"/></label>
                 </div>
-                <label className="dark:text-slate-300">Shipping:<input value={shipping} onChange={e => setShipping(e.target.value)} type="number" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-white"/></label>
+                <label className="dark:text-slate-300">Shipping:<input value={shipping} onChange={e => setShipping(e.target.value)} type="number" className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100"/></label>
             </div>
 
             <div className="bg-white p-4 rounded-lg border space-y-2 dark:bg-slate-800 dark:border-slate-700">
                 <h3 className="font-semibold text-slate-700 dark:text-slate-200">Notes</h3>
-                <textarea value={notes} onChange={e => setNotes(e.target.value)} className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-white" rows={4} />
+                <textarea value={notes} onChange={e => setNotes(e.target.value)} className="w-full p-2 border border-slate-300 rounded bg-white text-slate-900 dark:bg-slate-700 dark:border-slate-600 dark:text-slate-100" rows={4} />
             </div>
         </div>
 
@@ -303,6 +303,44 @@ const InvoiceGenerator: React.FC = () => {
             </footer>
           </div>
         </div>
+      </div>
+      <div className="bg-white p-6 rounded-lg border border-slate-200 dark:bg-slate-800 dark:border-slate-700 space-y-6 mt-6">
+        <section>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">What is an Invoice Generator?</h2>
+          <p className="mt-2 text-slate-600 dark:text-slate-300">An invoice generator is a tool that allows freelancers, small businesses, and contractors to create professional invoices quickly and easily. Instead of manually creating documents, you can fill in a simple form with details like your company information, client details, line items, taxes, and discounts. The tool then generates a clean, well-formatted invoice that you can download as a PDF and send to your clients for payment.</p>
+        </section>
+        <section>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">How to Use This Invoice Generator</h2>
+          <ol className="list-decimal list-inside mt-2 space-y-2 text-slate-600 dark:text-slate-300">
+            <li><strong>Customize Settings:</strong> Upload your company logo and select your preferred currency.</li>
+            <li><strong>Fill in Details:</strong> Enter your company's details under "From" and your client's details under "Bill To".</li>
+            <li><strong>Add Line Items:</strong> List each product or service, along with its quantity and rate. Click "Add Item" to add more rows.</li>
+            <li><strong>Set Totals:</strong> Adjust the discount, tax rate, and shipping costs as needed.</li>
+            <li><strong>Download PDF:</strong> Once you are happy with the preview on the right, click the "Download PDF" button to save your invoice.</li>
+          </ol>
+        </section>
+        <section>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Benefits of Using Our Tool</h2>
+          <ul className="list-disc list-inside mt-2 space-y-2 text-slate-600 dark:text-slate-300">
+            <li><strong>Professional Appearance:</strong> Create clean, branded invoices that make a great impression on your clients.</li>
+            <li><strong>Saves Time:</strong> Automatically calculates totals, taxes, and discounts, reducing manual work and errors.</li>
+            <li><strong>Highly Customizable:</strong> Add your logo, set custom payment terms, include shipping info, and more.</li>
+            <li><strong>Secure and Private:</strong> Your invoice data is processed in your browser and is never stored on our servers.</li>
+          </ul>
+        </section>
+        <section>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Frequently Asked Questions (FAQs)</h2>
+          <div className="mt-2 space-y-3 text-slate-600 dark:text-slate-300">
+            <div>
+              <h3 className="font-semibold">Is this invoice generator free to use?</h3>
+              <p>Yes, our tool is completely free with no limits on the number of invoices you can create.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold">Is my financial data saved anywhere?</h3>
+              <p>No. For your privacy, all invoice information is generated client-side. Nothing is saved or sent to our servers when you leave the page.</p>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );

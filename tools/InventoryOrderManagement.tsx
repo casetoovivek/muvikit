@@ -134,15 +134,17 @@ const InventoryOrderManagement: React.FC = () => {
             const newProducts = [...prevProducts];
             let canChangeStatus = true;
 
-            // Deduct stock when shipping
-            if ((oldStatus === 'Pending') && (newStatus === 'Shipped' || newStatus === 'Delivered')) {
-                order.items.forEach(item => {
+            // Deduct stock when shipping from pending
+            if (oldStatus === 'Pending' && (newStatus === 'Shipped' || newStatus === 'Delivered')) {
+                for (const item of order.items) {
                     const productIndex = newProducts.findIndex(p => p.id === item.productId);
-                    if (productIndex !== -1 && newProducts[productIndex].quantity < item.quantity) {
-                        alert(`Not enough stock for ${newProducts[productIndex].name}. Required: ${item.quantity}, Available: ${newProducts[productIndex].quantity}`);
+                    if (productIndex === -1 || newProducts[productIndex].quantity < item.quantity) {
+                        alert(`Not enough stock for ${item.productName}. Required: ${item.quantity}, Available: ${productIndex === -1 ? 0 : newProducts[productIndex].quantity}`);
                         canChangeStatus = false;
+                        break; 
                     }
-                });
+                }
+
                 if (canChangeStatus) {
                     order.items.forEach(item => {
                         const productIndex = newProducts.findIndex(p => p.id === item.productId);
@@ -160,8 +162,10 @@ const InventoryOrderManagement: React.FC = () => {
 
             if(canChangeStatus) {
                 setOrders(prevOrders => prevOrders.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+                return newProducts;
             }
-            return newProducts;
+            
+            return prevProducts; // Return original products if status change failed
         });
     };
 

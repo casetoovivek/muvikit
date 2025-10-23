@@ -45,7 +45,13 @@ const CompressPdf: React.FC = () => {
             const numPages = pdfDoc.numPages;
             
             const compressedPdf = new jsPDF();
-            if (numPages > 1) compressedPdf.deletePage(1);
+            if (numPages > 1) {
+                // remove the default first page if there are multiple pages
+                for (let i = compressedPdf.getNumberOfPages(); i > 1; i--) {
+                    compressedPdf.deletePage(i);
+                }
+            }
+
 
             for (let i = 1; i <= numPages; i++) {
                 const page = await pdfDoc.getPage(i);
@@ -93,8 +99,7 @@ const CompressPdf: React.FC = () => {
         <div className="space-y-6">
             <div className="pb-4 border-b border-gray-200 dark:border-slate-700">
                 <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100">Compress PDF</h2>
-                <p className="mt-1 text-lg text-slate-500 dark:text-slate-400">Reduce the file size of your PDF.</p>
-                 <p className="mt-1 text-sm text-slate-400 dark:text-slate-500">Note: This tool works best for PDFs with images. Text-only PDFs may increase in size.</p>
+                <p className="mt-1 text-lg text-slate-500 dark:text-slate-400">Reduce the file size of your PDF by optimizing images.</p>
             </div>
 
             <div className="bg-white p-6 rounded-lg border border-slate-200 space-y-4 dark:bg-slate-800 dark:border-slate-700">
@@ -104,12 +109,22 @@ const CompressPdf: React.FC = () => {
                     onChange={handleFileChange}
                     className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[var(--theme-primary-light)] file:text-[var(--theme-primary)] hover:file:opacity-90 dark:file:bg-slate-700 dark:file:text-sky-300 dark:text-slate-400"
                 />
-                
+
                 {file && (
                     <div className="space-y-2">
-                        <label htmlFor="quality" className="block text-sm font-medium text-gray-700 dark:text-slate-300">Image Quality: {Math.round(quality * 100)}%</label>
-                        <input id="quality" type="range" min="0.1" max="1" step="0.05" value={quality} onChange={e => setQuality(parseFloat(e.target.value))} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700" />
-                        <p className="text-xs text-slate-500 dark:text-slate-400">Lower quality means smaller file size.</p>
+                        <label htmlFor="quality" className="block text-sm font-medium text-gray-700 dark:text-slate-300">
+                            Image Quality (Lower quality = smaller file size): {Math.round(quality * 100)}%
+                        </label>
+                        <input
+                            id="quality"
+                            type="range"
+                            min="0.1"
+                            max="0.9"
+                            step="0.1"
+                            value={quality}
+                            onChange={(e) => setQuality(parseFloat(e.target.value))}
+                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700"
+                        />
                     </div>
                 )}
                 
@@ -120,21 +135,21 @@ const CompressPdf: React.FC = () => {
                     disabled={isLoading || !file}
                     className="w-full px-6 py-3 bg-[var(--theme-primary)] text-white font-semibold rounded-lg shadow-md hover:opacity-90 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center dark:disabled:bg-slate-600"
                 >
-                    {isLoading ? <><SpinnerIcon className="w-5 h-5 mr-2 animate-spin" /> Compressing...</> : 'Compress and Download'}
+                    {isLoading ? <><SpinnerIcon className="w-5 h-5 mr-2 animate-spin" /> Compressing...</> : 'Compress & Download PDF'}
                 </button>
             </div>
-
+            
             {result && file && (
-                <div className="bg-green-50 p-4 rounded-lg border border-green-200 text-center dark:bg-green-900/50 dark:border-green-800">
-                    <h3 className="font-semibold text-green-800 dark:text-green-300">Compression Successful!</h3>
-                    <p className="text-green-700 dark:text-green-400">
-                        Original Size: {formatBytes(file.size)} | New Size: {formatBytes(result.size)}
-                    </p>
-                    <p className="text-lg font-bold text-green-800 dark:text-green-200">
-                        Reduced by {result.reduction.toFixed(2)}%
-                    </p>
+                <div className="p-4 bg-green-50 text-green-800 border border-green-200 rounded-lg dark:bg-green-900/50 dark:text-green-300 dark:border-green-800">
+                    <p className="font-bold">Compression Successful!</p>
+                    <p>Original size: <strong>{formatBytes(file.size)}</strong></p>
+                    <p>New size: <strong>{formatBytes(result.size)}</strong></p>
+                    <p>You saved <strong>{formatBytes(file.size - result.size)}</strong> ({result.reduction.toFixed(1)}% reduction).</p>
                 </div>
             )}
+            <p className="mt-8 text-center text-xs text-slate-500 dark:text-slate-400 italic">
+                If The Text Is Not Displaying Clearly, Please Consider Using Dark Mode.
+            </p>
         </div>
     );
 };

@@ -9,7 +9,9 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ tools, selectedTool, onSelectTool }) => {
-  const categories = Array.from(new Set(tools.map(t => t.category || 'Other')));
+  // FIX: Explicitly type `categories` as string[] to fix an issue where `Array.from(new Set(...))` was being inferred as `unknown[]`.
+  // This ensures the `category` variable in the subsequent `.map()` is correctly typed as a string.
+  const categories: string[] = Array.from(new Set(tools.map(t => t.category || 'Other')));
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set(categories));
 
   const toggleCategory = (category: string) => {
@@ -54,10 +56,10 @@ const Sidebar: React.FC<SidebarProps> = ({ tools, selectedTool, onSelectTool }) 
                         e.preventDefault();
                         onSelectTool(tool);
                       }}
-                      className={`flex items-center px-2 py-2 text-sm font-medium rounded-md group ${
+                      className={`flex items-center px-2 py-2 text-sm font-medium rounded-md group transition-colors duration-200 ${
                         selectedTool?.id === tool.id
                           ? 'bg-[var(--theme-primary-light)] text-[var(--theme-primary)] dark:bg-sky-900/50 dark:text-sky-300'
-                          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100'
+                          : 'text-gray-600 hover:bg-sky-50 hover:text-[var(--theme-primary)] dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-sky-300'
                       }`}
                     >
                       {/* FIX: Removed redundant type cast as it's no longer needed after updating the Tool interface. */}

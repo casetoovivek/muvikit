@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-// FIX: Corrected import path for icon
 import { CopyIcon } from '../components/icons';
 
 const ColorPicker: React.FC = () => {
@@ -39,8 +38,8 @@ const ColorPicker: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="pb-4 border-b border-gray-200 dark:border-slate-700">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-slate-100">Color Picker</h2>
-        <p className="mt-1 text-md text-gray-600 dark:text-slate-400">Select a color to get its HEX, RGB, and HSL codes.</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-slate-100">Color Picker & Converter</h1>
+        <p className="mt-1 text-lg text-gray-600 dark:text-slate-400">Select a color to instantly get its HEX, RGB, and HSL codes. An essential tool for designers, developers, and artists.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
@@ -59,6 +58,42 @@ const ColorPicker: React.FC = () => {
             <ColorDisplay label="RGB" value={rgb} onCopy={copyToClipboard} />
             <ColorDisplay label="HSL" value={hsl} onCopy={copyToClipboard} />
         </div>
+      </div>
+      
+       <div className="bg-white p-6 rounded-lg border border-slate-200 dark:bg-slate-800 dark:border-slate-700 space-y-6 max-w-4xl mx-auto">
+        <section>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">What are HEX, RGB, and HSL?</h2>
+          <p className="mt-2 text-slate-600 dark:text-slate-300">HEX, RGB, and HSL are different ways to represent colors in digital formats. <strong>HEX</strong> (Hexadecimal) codes are six-character codes often used in web design (e.g., #FFFFFF for white). <strong>RGB</strong> (Red, Green, Blue) defines a color by the intensity of its red, green, and blue components. <strong>HSL</strong> (Hue, Saturation, Lightness) represents color in a more intuitive, human-friendly way, describing its shade, intensity, and brightness. Our tool instantly converts between all three formats.</p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">How to Use the Color Picker</h2>
+          <ol className="list-decimal list-inside mt-2 space-y-2 text-slate-600 dark:text-slate-300">
+            <li><strong>Select a Color:</strong> Click on the large color preview on the left to open your system's color picker. You can also manually enter a HEX code in the "HEX" field.</li>
+            <li><strong>View the Codes:</strong> The HEX, RGB, and HSL values for your selected color will be automatically displayed.</li>
+            <li><strong>Copy the Code:</strong> Click the copy icon next to any value to copy it to your clipboard.</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Benefits of This Tool</h2>
+          <ul className="list-disc list-inside mt-2 space-y-2 text-slate-600 dark:text-slate-300">
+            <li><strong>Real-Time Conversion:</strong> Instantly see the corresponding codes in all three formats as you pick a color.</li>
+            <li><strong>Easy to Use:</strong> A simple, visual interface makes finding the perfect color and its codes effortless.</li>
+            <li><strong>One-Click Copy:</strong> Quickly copy any color value to your clipboard for use in your projects.</li>
+            <li><strong>Developer and Designer Friendly:</strong> Provides the most common color code formats used in web development, graphic design, and data visualization.</li>
+          </ul>
+        </section>
+        
+        <section>
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Frequently Asked Questions (FAQs)</h2>
+            <div className="mt-2 space-y-3 text-slate-600 dark:text-slate-300">
+              <div>
+                <h3 className="font-semibold">Can I pick a color from an image?</h3>
+                <p>This tool uses your system's built-in color picker. Many operating systems (like macOS and Windows) have an eyedropper tool within their native color picker that allows you to select a color from anywhere on your screen, including an image.</p>
+              </div>
+            </div>
+        </section>
       </div>
     </div>
   );
